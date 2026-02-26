@@ -1,16 +1,16 @@
 package com.rohit.sb_ecom.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "products")
+@ToString
 public class Product {
 
     @Id
@@ -27,6 +27,13 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private User user;
+
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<CartItem> products = new ArrayList<>();
 
     public Long getProductId() {
         return productId;
@@ -84,11 +91,11 @@ public class Product {
         this.discount = discount;
     }
 
-    public double getSpecialPrice() {
+    public Double getSpecialPrice() {
         return specialPrice;
     }
 
-    public void setSpecialPrice(double specialPrice) {
+    public void setSpecialPrice(Double specialPrice) {
         this.specialPrice = specialPrice;
     }
 
@@ -98,5 +105,13 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
